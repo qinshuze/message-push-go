@@ -1,0 +1,27 @@
+Name: 狸猫推送RPC服务
+ListenOn: 0.0.0.0:8000
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: fast.ws.rpc
+Mode: dev
+WebSocket:
+  ListenOn: 0.0.0.0:8001
+  ClientAuth: "http://localhost:8002/auth/client"
+  WhiteList: [
+    "localhost",
+    "127.0.0.1",
+  ]
+Middlewares:
+  Log: false
+  Trace: true
+  Prometheus: false
+  Shedding: false
+  Metrics: false
+  Breaker: false
+  Recover: false
+  MaxBytes: false
+  Gunzip: false
+  MaxConns: false
+  Timeout: false
+Verbose: false

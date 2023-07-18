@@ -1,0 +1,25 @@
+Name: ws-api
+Host: 0.0.0.0
+Port: 8002
+WsRpc:
+  Hosts:
+    - 127.0.0.1:2379
+  Key: fast.ws.rpc
+Auth:
+  AccessSecret: 3P8JA04Hpttwq9uMYyZUTzGts2P1Q5Cq
+  AccessTTL: 86400
+Lang: cn
+DataSource: postgres://postgres:MyPassword%40123@localhost:5432/ccps
+Middlewares:
+  Log: false
+  Trace: true
+  Prometheus: false
+  Shedding: false
+  Metrics: false
+  Breaker: false
+  Recover: false
+  MaxBytes: false
+  Gunzip: false
+  MaxConns: false
+  Timeout: false
+Verbose: false

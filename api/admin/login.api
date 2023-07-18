@@ -1,0 +1,34 @@
+import "base.api"
+
+type User {
+	Id            int          `json:"id,optional"`
+	Account       string       `json:"account,optional"`
+	Nickname      string       `json:"nickname,optional"`
+	Avatar        string       `json:"avatar,optional"`
+	Email         string       `json:"email,optional"`
+	LastLoginTime int          `json:"last_login_time,optional"`
+	LastLoginIp   string       `json:"last_login_ip,optional"`
+	CreateTime    int          `json:"create_time,optional"`
+	IsRoot        bool         `json:"is_root,optional"`
+	Roles         []Role       `json:"roles,optional"`
+	Permissions   []Permission `json:"permissions"`
+}
+
+type (
+	LoginReq {
+		Account  string `json:"account,optional" validate:"required"`
+		Password string `json:"password,optional" validate:"required"`
+	}
+	LoginRes {
+		User
+		Token string `json:"token"`
+	}
+)
+
+@server (
+	group: login
+)
+service admin-api {
+	@handler Login
+	post /login (LoginReq) returns (LoginRes)
+}

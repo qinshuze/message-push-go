@@ -1,0 +1,130 @@
+// 请求/响应 结构体
+type (
+	Request {
+	}
+	Response {
+	}
+)
+
+// 获取令牌 请求/响应 结构体
+type (
+	TokenReq {
+		AccessKey string `form:"access_key,optional" validate:"required"`
+	}
+	TokenRes {
+		Token string `json:"token"`
+	}
+)
+
+// 客户端认证 请求/响应 结构体
+type (
+	ClientAuthReq {
+		Realm string `form:"realm,optional" validate:"required"`
+	}
+	ClientAuthRes {
+	}
+)
+
+// 获取客户端连接数 请求/响应 结构体
+type (
+	CountClientReq {
+		Names   string `form:"names,optional"`
+		RoomIds string `form:"room_ids,optional"`
+		Tags    string `form:"tags,optional"`
+	}
+	CountClientRes {
+		Count int64 `json:"count"`
+	}
+)
+
+// 查询客户端 请求/响应 结构体
+type (
+	ClientListReq {
+		Names   string `form:"names,optional"`
+		RoomIds string `form:"room_ids,optional"`
+		Tags    string `form:"tags,optional"`
+	}
+	ClientListRes {
+		Name    string   `json:"name"`
+		Tags    []string `json:"tags"`
+		RoomIds []string `json:"room_ids"`
+	}
+)
+
+// 推送消息 请求/响应 结构体
+type (
+	PushMsgReq {
+		Names   string `form:"names,optional"`
+		RoomIds string `form:"room_ids,optional"`
+		Tags    string `form:"tags,optional"`
+		Content string `json:"content,optional" validate:"required"`
+	}
+	PushMsgRes {
+		TotalCount   int `json:"total_count"`
+		SuccessCount int `json:"success_count"`
+		FailCount    int `json:"fail_count"`
+	}
+)
+
+// 加入房间 请求/响应 结构体
+type (
+	JoinRoomReq {
+		OptNames   string `form:"opt_names,optional"`
+		OptRoomIds string `form:"opt_room_ids,optional"`
+		OptTags    string `form:"opt_tags,optional"`
+		RoomIds    string `form:"room_ids,optional" validate:"required"`
+	}
+	JoinRoomRes {
+	}
+)
+
+// 离开房间 请求/响应 结构体
+type (
+	LeaveRoomReq {
+		OptNames   string `form:"opt_names,optional"`
+		OptRoomIds string `form:"opt_room_ids,optional"`
+		OptTags    string `form:"opt_tags,optional"`
+		RoomIds    string `form:"room_ids,optional" validate:"required"`
+	}
+	LeaveRoomRes {
+	}
+)
+
+// 服务路由组
+@server (
+	middleware: Signature
+)
+service ws-api {
+	@doc "获取授权令牌"
+	@handler GetToken
+	get /token (TokenReq) returns (TokenRes)
+}
+
+@server(
+	middleware: Authorize
+)
+service ws-api {
+	@doc "客户端认证"
+	@handler ClientAuth
+	get /auth/client (ClientAuthReq) returns (ClientAuthRes)
+
+	@doc "获取客户端连接数"
+	@handler CountClient
+	get /count/client (CountClientReq) returns (CountClientRes)
+
+	@doc "加入房间"
+	@handler JoinRoom
+	get /join/room (JoinRoomReq) returns (JoinRoomRes)
+
+	@doc "离开房间"
+	@handler LeaveRoom
+	get /leave/room (LeaveRoomReq) returns (LeaveRoomRes)
+
+	@doc "获取客户端列表"
+	@handler ClientList
+	get /client/list (ClientListReq) returns ([]ClientListRes)
+
+	@doc "推送消息"
+	@handler PushMsg
+	post /push/msg (PushMsgReq) returns (PushMsgRes)
+}

@@ -1,0 +1,120 @@
+syntax = "proto3";
+
+package ws;
+option go_package = "./ws";
+
+// Ping 请求体
+message PingReq {
+  string ping = 1;
+}
+// Ping 响应体
+message PingRes {
+  string pong = 1;
+}
+
+// 客户端查询选项
+message SelectOptions {
+  repeated string ids = 1;
+  repeated string names = 2;
+  repeated string tags = 3;
+  repeated string room_ids = 4;
+  repeated string realms = 5;
+}
+
+// 加入房间 请求体
+message JoinRoomReq {
+  SelectOptions options = 1;
+  repeated string room_ids = 2;
+}
+// 加入房间 响应体
+message JoinRoomRes {
+}
+
+// 离开房间 请求体
+message LeaveRoomReq {
+  SelectOptions options = 1;
+  repeated string room_ids = 2;
+}
+// 离开房间 响应体
+message LeaveRoomRes {
+}
+
+// 添加标签 请求体
+message AddTagsReq {
+  SelectOptions options = 1;
+  repeated string tags = 2;
+}
+// 添加标签 响应体
+message AddTagsResp {
+}
+
+// 删除标签 请求体
+message RemoveTagsReq {
+  SelectOptions options = 1;
+  repeated string tags = 2;
+}
+// 删除标签 响应体
+message RemoveTagsResp {
+}
+
+// 获取客户端连接数量 请求体
+message CountReq {
+  SelectOptions options = 1;
+}
+// 获取客户端连接数量 响应体
+message CountRes {
+  int64 count = 1;
+}
+
+// 推送消息 请求体
+message PushReq {
+  string content = 1;
+  SelectOptions options = 2;
+}
+// 推送消息 响应体
+message PushRes {
+  int64 total_count = 1;
+  int64 success_count = 2;
+  int64 fail_count = 3;
+}
+
+// 客户端结构体
+message Client {
+  string id = 1;
+  string name = 2;
+  repeated string tags = 3;
+  repeated string room_ids = 4;
+  string realm = 5;
+}
+// 查询客户端 请求体
+message ClientsReq {
+  SelectOptions options = 1;
+}
+// 查询客户端 响应体
+message ClientsRes {
+  repeated Client list = 1;
+}
+
+service Ws {
+  rpc Ping(PingReq) returns(PingRes);
+  // JoinRoom 加入房间
+  rpc JoinRoom(JoinRoomReq) returns(JoinRoomRes);
+
+  // LeaveRoom 离开房间
+  rpc LeaveRoom(LeaveRoomReq) returns(LeaveRoomRes);
+
+  // AddTag 添加标签
+  rpc AddTag(AddTagsReq) returns(AddTagsResp);
+
+  // RemoveTag 移除标签
+  rpc RemoveTag(RemoveTagsReq) returns(RemoveTagsResp);
+
+  // Count 获取客户端连接数量
+  rpc Count(CountReq) returns(CountRes);
+
+  // Push 推送消息
+  rpc Push(PushReq) returns(PushRes);
+
+  // Clients 查询客户端
+  rpc Clients(ClientsReq) returns(ClientsRes);
+}

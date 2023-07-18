@@ -1,0 +1,25 @@
+type Role {
+    Id   int    `json:"id,optional"`
+    Name string `json:"name,optional"`
+}
+
+type Permission {
+    Id       int          `json:"id,optional"`
+    Name     string          `json:"name,optional"`
+    Key     string          `json:"_"`
+    Children []Permission `json:"children,optional"`
+}
+
+type LoginUser {
+    Id            int    `json:"id,optional"`
+    Account       string `json:"account,optional"`
+    Nickname      string `json:"nickname,optional"`
+    Avatar        string `json:"avatar,optional"`
+    Email         string `json:"email,optional"`
+    LastLoginTime int    `json:"last_login_time,optional"`
+    LastLoginIp   string `json:"last_login_ip,optional"`
+    CreateTime    string `json:"create_time,optional"`
+    IsRoot        bool   `json:"is_root,optional"`
+    Role
+    Permission
+}
