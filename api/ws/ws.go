@@ -19,6 +19,10 @@ func middleware(ctx *svc.ServiceContext) func(next http.HandlerFunc) http.Handle
 		return func(w http.ResponseWriter, r *http.Request) {
 			ctx.LangLoader.SetLangByRequest(r)
 			w.Header().Add("Content-Language", ctx.LangLoader.GetLang())
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.Header().Set("Access-Control-Allow-Methods", "*")
+			w.Header().Set("Access-Control-Allow-Headers", "*")
+			w.Header().Set("Access-Control-Expose-Headers", "*")
 			next(w, r)
 		}
 	}

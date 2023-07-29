@@ -46,7 +46,7 @@ func (m *SignatureMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		var hashedRequestPayload = params.Get("hashed_request_payload")
-		var signStr = r.Method + " " + r.Host + r.URL.Path + "?"
+		var signStr = r.Method + " " + "?"
 		if hashedRequestPayload != "" {
 			bytes, err := io.ReadAll(r.Body)
 			if err != nil {

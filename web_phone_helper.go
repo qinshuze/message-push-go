@@ -281,7 +281,6 @@ func Q2(w http.ResponseWriter, r *http.Request) {
 	var id = r.URL.Query().Get("id")
 	var deviceId = r.URL.Query().Get("device_id")
 	var result = map[string]any{"msg": "ok", "code": 200}
-
 	if qrMap[id] == nil {
 		result["msg"] = "无效id"
 		result["code"] = 422
@@ -300,11 +299,26 @@ func Q2(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(marshal)
 }
 
+// 自定义中间件函数来拦截HTTP请求
+func interceptor(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// 执行任何预处理逻辑
+		fmt.Println("拦截请求:", r.URL.Path)
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "*")
+		w.Header().Set("Access-Control-Allow-Headers", "*")
+		w.Header().Set("Access-Control-Expose-Headers", "*")
+		// 调用下一个处理器
+		next.ServeHTTP(w, r)
+	})
+}
+
 func main() {
-	http.HandleFunc("/w", T2)
-	http.HandleFunc("/r", E1)
-	http.HandleFunc("/qrcode", Q1)
-	http.HandleFunc("/qrcode/step1", Q2)
-	http.HandleFunc("/qrcode/step2", Q3)
-	log.Fatalln(http.ListenAndServe("0.0.0.0:8004", nil))
+	server := http.NewServeMux()
+	server.HandleFunc("/qrcode", Q1)
+	server.HandleFunc("/qrcode/step1", Q2)
+	server.HandleFunc("/qrcode/step2", Q3)
+
+	handler := interceptor(server)
+	log.Fatalln(http.ListenAndServe("0.0.0.0:8004", handler))
 }

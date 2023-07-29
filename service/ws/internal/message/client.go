@@ -122,7 +122,7 @@ func (c *Client) messageHandler(ctx *svc.ServiceContext) {
 
 // messageRelay 转发消息
 func (c *Client) messageRelay(message *ReceiveMessage) {
-	color.Blue("接收到消息：%v", message)
+	//color.Blue("接收到消息：%v", message)
 	sendMsg := SendMessage{Type: Relay, Content: message.Content(), Sender: c.name}
 	clientColl := Clients().GetByRealm(c.realm).Filter(c)
 
