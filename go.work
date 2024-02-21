@@ -1,0 +1,9 @@
+go 1.22.0
+
+use (
+	./internal/utils
+	./internal/model
+	./api/admin
+	./api/ws
+	./service/ws
+)
